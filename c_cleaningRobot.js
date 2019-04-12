@@ -118,7 +118,7 @@ function renderAgentPercept(diagram, dirty) {
 }
 
 function renderAgentAction(diagram, action) {
-    let actionLabel = {null: 'Waiting', 'SUCK': 'Vacuuming', 'LEFT': 'Going left', 'RIGHT': 'Going right'}[action];
+    let actionLabel = {null: 'Waiting', 'SUCK': 'Vacuuming', 'LEFT': 'Going left', 'RIGHT': 'Going right', 'UP': 'Going up', 'DOWN': 'Going down'}[action];
     diagram.actionText.text(actionLabel);
 }
 
@@ -248,11 +248,34 @@ function makeTableControlledDiagram() {
         let left_dirty = table.select("[data-action=left-dirty] select").node().value;
         let right_clean = table.select("[data-action=right-clean] select").node().value;
         let right_dirty = table.select("[data-action=right-dirty] select").node().value;
-        return [[left_clean, left_dirty], [right_clean, right_dirty]];
+        let up_clean = table.select("[data-action=up-clean] select").node().value;
+        let up_dirty = table.select("[data-action=up-dirty] select").node().value;
+        let down_clean = table.select("[data-action=down-clean] select").node().value;
+        let down_dirty = table.select("[data-action=down-dirty] select").node().value;
+        return [[left_clean, left_dirty], [right_clean, right_dirty],[up_clean, up_dirty], [down_clean, down_dirty]];
     }
 
     function showPerceptAndAction(location, percept, action) {
-        let locationMarker = location? 'right' : 'left';
+        let locationMarker = 'left'
+        switch(location){
+            case 1: {
+                locationMarker = 'right';
+                break;
+            }
+            case 2: {
+                locationMarker = 'up';
+                break;
+            }
+            case 3: {
+                locationMarker = 'down';
+                break;
+            }
+            default: {
+                locationMarker = 'left';
+                break;
+            }
+        };
+    console.log(locationMarker);
         let perceptMarker = percept? 'dirty' : 'clean';
         
         d3.selectAll('#table-controlled-diagram th')
